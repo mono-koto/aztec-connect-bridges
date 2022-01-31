@@ -155,9 +155,9 @@ const assetSpecs: AssetSpecs = {
   ]),
 };
 
-jest.setTimeout(240000);
-
 describe("defi bridge", function () {
+  this.timeout(240000);
+
   const vaultConfig = VaultConfig;
   let rollupContract: RollupProcessor;
   let defiBridgeProxy: Contract;
@@ -192,7 +192,7 @@ describe("defi bridge", function () {
 
   const randomAddress = () => randomBytes(20).toString("hex");
 
-  beforeAll(async () => {
+  before(async () => {
     [signer] = await ethers.getSigners();
   });
 

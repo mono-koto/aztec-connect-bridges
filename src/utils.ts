@@ -1,6 +1,7 @@
 import { Contract, Signer } from "ethers";
 import ERC20 from "@openzeppelin/contracts/build/contracts/ERC20.json";
-import WETH from "./artifacts/contracts/interfaces/IWETH.sol/WETH.json";
+import { IWETH__factory } from "../typechain-types";
+// import WETH from "./artifacts/contracts/interfaces/IWETH.sol/WETH.json";
 
 export const addressesAreSame = (a: string, b: string) =>
   a.toLowerCase() === b.toLowerCase();
@@ -52,7 +53,7 @@ export async function transferToken(
 }
 
 export function createWethContract(signer: Signer) {
-  return new Contract(Constants.WETH9, WETH.abi, signer).connect(signer);
+  return new Contract(Constants.WETH9, IWETH__factory.abi, signer).connect(signer);
 }
 
 export async function approveWeth(spender: string, amount: bigint, signer: Signer) {

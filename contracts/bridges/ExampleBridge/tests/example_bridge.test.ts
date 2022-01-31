@@ -26,7 +26,7 @@ describe("defi bridge", function () {
   let signer: Signer;
   let exampleBridgeContract: ExampleBridgeContract;
 
-  beforeAll(async () => {
+  before(async () => {
     [signer] = await ethers.getSigners();
 
     const factory = new ContractFactory(

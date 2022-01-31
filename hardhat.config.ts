@@ -1,5 +1,11 @@
+
+import * as dotenv from "dotenv";
+
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
+// import "@nomiclabs/hardhat-etherscan";
+// import "hardhat-gas-reporter";
+// import "solidity-coverage";
 import { HardhatUserConfig } from "hardhat/config";
 
 const getBlockNumber = () => {
@@ -42,6 +48,7 @@ const config: HardhatUserConfig = {
   },
   paths: {
     artifacts: "./src/artifacts",
+    tests: './contracts'
   },
 };
 

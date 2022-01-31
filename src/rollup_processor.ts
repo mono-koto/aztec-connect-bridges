@@ -4,10 +4,11 @@ import { Contract, ContractFactory, ethers, Signer } from "ethers";
 import abi from "./artifacts/contracts/MockRollupProcessor.sol/MockRollupProcessor.json";
 
 import ISwapRouter from "./artifacts/contracts/interfaces/ISwapRouter.sol/ISwapRouter.json";
-import WETH from "./artifacts/contracts/interfaces/IWETH.sol/WETH.json";
+// import WETH from "./artifacts/contracts/interfaces/IWETH.sol/WETH.json";
 import ERC20 from "@openzeppelin/contracts/build/contracts/ERC20.json";
 import { Uniswap } from "./uniswap";
 import { Curve } from "./curve";
+import { IWETH__factory } from "../typechain-types";
 
 const fixEthersStackTrace = (err: Error) => {
   err.stack! += new Error().stack;
@@ -60,7 +61,7 @@ export class RollupProcessor {
       signer
     );
 
-    this.wethContract = new Contract(this.WETH9, WETH.abi, signer);
+    this.wethContract = new Contract(this.WETH9, IWETH__factory.abi, signer);
   }
 
   static async deploy(signer: Signer, args: any[]) {

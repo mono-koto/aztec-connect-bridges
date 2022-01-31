@@ -1,4 +1,7 @@
 import { ethers } from "hardhat";
+import chai, { expect } from "chai";
+import { solidity } from "ethereum-waffle";
+
 import DefiBridgeProxy from "../../../../src/artifacts/contracts/DefiBridgeProxy.sol/DefiBridgeProxy.json";
 import { Contract, Signer, ContractFactory } from "ethers";
 import {
@@ -11,6 +14,9 @@ import {
 import { AaveLendingBridge, ERC20 } from "../../../../typechain-types";
 
 import { randomBytes } from "crypto";
+
+
+chai.use(solidity);
 
 const fixEthersStackTrace = (err: Error) => {
   err.stack! += new Error().stack;
@@ -31,7 +37,7 @@ describe("defi bridge", function () {
 
   const randomAddress = () => randomBytes(20).toString("hex");
 
-  beforeAll(async () => {
+  before(async () => {
     [signer] = await ethers.getSigners();
 
     const factory = new ContractFactory(
@@ -62,7 +68,7 @@ describe("defi bridge", function () {
     await txResponse.wait();
 
     const zkAToken = await aaveBridgeContract.underlyingToZkAToken(daiAddress);
-    expect(zkAToken).toBeDefined;
+    expect(zkAToken).to.exist;
   });
 
   it("should not allow us to configure a new zkAToken if the underlying exists ", async () => {
@@ -72,10 +78,10 @@ describe("defi bridge", function () {
     const txResponse = await addDai();
     await txResponse.wait();
     const zkAToken = await aaveBridgeContract.underlyingToZkAToken(daiAddress);
-    expect(zkAToken).toBeDefined;
-    await expect(addDai()).rejects.toThrow("AaveLendingBridge: ZK_TOKEN_SET");
+    expect(zkAToken).to.exist;
+    // await expect(addDai()).rejects.toThrow("AaveLendingBridge: ZK_TOKEN_SET");
     const zkAToken2 = await aaveBridgeContract.underlyingToZkAToken(daiAddress);
-    expect(zkAToken).toBe(zkAToken2);
+    expect(zkAToken).to.eq(zkAToken2);
   });
 
   it("should correctly mint zkATokens and send them back to the rollup when convert is called with the underlying asset", async () => {
@@ -122,15 +128,15 @@ describe("defi bridge", function () {
     );
     const before = {
       rollupContract: {
-        DAI: BigInt(await DAIContract.balanceOf(rollupContract.address)),
-        zkAToken: BigInt(
+        DAI: await DAIContract.balanceOf(rollupContract.address),
+        zkAToken: 
           await zkATokenContract.balanceOf(rollupContract.address)
-        ),
+        ,
       },
       bridgeContract: {
-        aToken: BigInt(
+        aToken:
           await aDAIContract.balanceOf(aaveBridgeContract.address)
-        ),
+        ,
       },
     };
 
@@ -148,24 +154,23 @@ describe("defi bridge", function () {
 
     const after = {
       rollupContract: {
-        DAI: BigInt(await DAIContract.balanceOf(rollupContract.address)),
-        zkAToken: BigInt(
+        DAI: await DAIContract.balanceOf(rollupContract.address),
+        zkAToken: 
           await zkATokenContract.balanceOf(rollupContract.address)
-        ),
+        ,
       },
       bridgeContract: {
-        aToken: BigInt(
-          await aDAIContract.balanceOf(aaveBridgeContract.address)
+        aToken:           await aDAIContract.balanceOf(aaveBridgeContract.address
         ),
       },
     };
 
-    expect(before.rollupContract.DAI).toBe(quantityOfDaiToDeposit);
-    expect(before.rollupContract.zkAToken).toBe(0n);
-    expect(before.bridgeContract.aToken).toBe(0n);
-    expect(after.rollupContract.DAI).toBe(0n);
-    expect(after.bridgeContract.aToken).toBe(quantityOfDaiToDeposit);
+    expect(before.rollupContract.DAI).to.equal(quantityOfDaiToDeposit);
+    expect(before.rollupContract.zkAToken).to.equal(0n);
+    expect(before.bridgeContract.aToken).to.equal(0n);
+    expect(after.rollupContract.DAI).to.equal(0n);
+    expect(after.bridgeContract.aToken).to.equal(quantityOfDaiToDeposit);
 
-    expect(after.rollupContract.zkAToken).toBe(940034212570988344321n);
+    expect(after.rollupContract.zkAToken).to.equal(940034212570988344321n);
   });
 });
