@@ -11,7 +11,7 @@ import { RollupProcessor } from "../../../../src/rollup_processor";
 
 chai.use(solidity);
 
-describe.only("CurveSwapBridge", function () {
+describe("CurveSwapBridge", function () {
     let bridge: CurveSwapBridge;
     let rollupContract: RollupProcessor;
     let defiBridgeProxy: DefiBridgeProxy;
@@ -43,7 +43,7 @@ describe.only("CurveSwapBridge", function () {
         dai = await ethers.getContractAt("ERC20", mainnet.DAI_ADDRESS);
     });
 
-    it.only("should swap ERC20 to ETH (CVX -> ETH)", async () => {
+    it("should swap ERC20 to ETH (CVX -> ETH)", async () => {
         const amount = 10000000000000000000n;
         await fundERC20FromAccount(cvx, mainnet.CVX_HOLDER_ADDRESS, defiBridgeProxy.address, amount);
 
