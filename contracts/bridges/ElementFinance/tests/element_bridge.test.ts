@@ -1,4 +1,3 @@
-import chai, { expect } from "chai";
 import { ethers } from "hardhat";
 import DefiBridgeProxy from "../../../../src/artifacts/contracts/DefiBridgeProxy.sol/DefiBridgeProxy.json";
 import { Contract, Signer, ContractFactory } from "ethers";
@@ -156,9 +155,9 @@ const assetSpecs: AssetSpecs = {
   ]),
 };
 
-describe("defi bridge", function () {
-  this.timeout(240000);
+jest.setTimeout(240000);
 
+describe("defi bridge", function () {
   const vaultConfig = VaultConfig;
   let rollupContract: RollupProcessor;
   let defiBridgeProxy: Contract;
@@ -193,7 +192,7 @@ describe("defi bridge", function () {
 
   const randomAddress = () => randomBytes(20).toString("hex");
 
-  before(async () => {
+  beforeAll(async () => {
     [signer] = await ethers.getSigners();
   });
 
@@ -273,7 +272,7 @@ describe("defi bridge", function () {
         elementDaiJan2022Spec.expiry
       );
     };
-    await expect(func()).does.not.throw
+    await expect(func()).resolves.not.toThrow();
   });
 
   it("should not allow us to configure wrong expiry", async () => {
@@ -444,7 +443,7 @@ describe("defi bridge", function () {
         .catch(fixEthersStackTrace);
     };
 
-    await expect(register()).does.not.throw;
+    await expect(register()).resolves.not.toThrow();
 
     // measure the quantities of DAI and principal tokens in both the bridge contract and the balancer
     const underlyingContract = new Contract(
