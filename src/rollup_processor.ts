@@ -4,7 +4,7 @@ import { Contract, ContractFactory, ethers, Signer } from "ethers";
 import abi from "./artifacts/contracts/MockRollupProcessor.sol/MockRollupProcessor.json";
 
 import ISwapRouter from "./artifacts/contracts/interfaces/ISwapRouter.sol/ISwapRouter.json";
-import WETH from "./artifacts/contracts/interfaces/IWETH.sol/WETH.json";
+import WETH from "./artifacts/contracts/interfaces/IWETH.sol/IWETH.json";
 import ERC20 from "@openzeppelin/contracts/build/contracts/ERC20.json";
 import { Uniswap } from "./uniswap";
 import { Curve } from "./curve";

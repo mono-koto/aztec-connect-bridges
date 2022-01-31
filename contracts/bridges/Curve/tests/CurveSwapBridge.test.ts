@@ -21,7 +21,7 @@ describe("CurveSwapBridge", function () {
     let cvx: ERC20;
     let dai: ERC20;
 
-    before(async () => {
+    beforeAll(async () => {
         [deployer, signer] = await ethers.getSigners();
 
         const f = await ethers.getContractFactory("DefiBridgeProxy");
