@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 pragma experimental ABIEncoderV2;
 
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import { IDefiBridge } from "../../../interfaces/IDefiBridge.sol";
 import { IWETH } from "../../../interfaces/IWETH.sol";
 import { ICurveProvider } from "../../../interfaces/ICurveProvider.sol";
@@ -15,6 +15,8 @@ import { AztecTypes } from "../../../AztecTypes.sol";
 import "hardhat/console.sol";
 
 contract CurveSwapBridge is IDefiBridge {
+  using SafeERC20 for IERC20;
+
   uint256 private constant CURVE_SWAPS_ADDRESS_INDEX = 2;
 
   IRollupProcessor public immutable rollupProcessor;
@@ -99,10 +101,7 @@ contract CurveSwapBridge is IDefiBridge {
     ICurveExchange curveExchange = ICurveExchange(
       curveAddressProvider.get_address(CURVE_SWAPS_ADDRESS_INDEX)
     );
-    require(
-      IERC20(inputAddr).approve(address(curveExchange), inputValue),
-      "ERC20_APPROVE_FAILED"
-    );
+    IERC20(inputAddr).safeIncreaseAllowance(address(curveExchange), inputValue);
 
     address pool;
     uint256 rate;
@@ -124,7 +123,7 @@ contract CurveSwapBridge is IDefiBridge {
       weth.withdraw(resultAmount);
       rollupProcessor.receiveEthFromBridge{value: resultAmount}(interactionNonce);
     } else if (output.assetType == AztecTypes.AztecAssetType.ERC20) {
-      IERC20(outputAddr).approve(address(rollupProcessor), resultAmount);
+      IERC20(outputAddr).safeIncreaseAllowance(address(rollupProcessor), resultAmount);
     }
 
     return resultAmount;
