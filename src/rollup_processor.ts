@@ -86,6 +86,7 @@ export class RollupProcessor {
       this.contract.interface,
       signer
     );
+
     const { gasLimit, gasPrice } = options;
 
     /* 1. In real life the rollup contract calls delegateCall on the defiBridgeProxy contract.
@@ -95,7 +96,6 @@ export class RollupProcessor {
     For a good developer UX we should do the same.
 
     */
-
     const tx = await contract.convert(
       bridgeAddress,
       assetToArray(inputAssetA),

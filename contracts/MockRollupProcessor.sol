@@ -191,6 +191,7 @@ contract MockRollupProcessor {
       defiInteractions[interactionNonce].auxInputData == 0,
       "Rollup Contract: INTERACTION_ALREADY_EXISTS"
     );
+
     defiInteractions[interactionNonce] = DefiInteraction(
       bridgeAddress,
       inputAssetA,
@@ -225,6 +226,7 @@ contract MockRollupProcessor {
       result,
       (uint256, uint256, bool)
     );
+
 
     emit AztecBridgeInteraction(
       bridgeAddress,
